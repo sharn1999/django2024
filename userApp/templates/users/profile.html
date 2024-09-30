@@ -1,0 +1,30 @@
+{% load static %} 
+
+<h2>{{ profile_user.username }}'s Profile</h2>
+{% if profile.profile_picture %}
+    <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" />
+{% else %}
+    <img src="{% static 'images/default_avatar.png' %}" alt="Default Avatar" />
+{% endif %}
+<p>{{ profile.bio }}</p>
+<p>Followers: {{ followers_count }} | Following: {{ following_count }}</p>
+
+{% if is_owner %}
+    <a href="{% url 'profile_edit' profile_user.pk %}">Редактировать профиль</a>
+{% endif %}
+
+<a href="{% url 'main' %}">На главную</a>
+
+{% if request.user != profile_user %}
+    {% if is_following %}
+        <form method="post" action="{% url 'unfollow_user' profile_user.pk %}">
+            {% csrf_token %}
+            <button type="submit">Отписаться</button>
+        </form>
+    {% else %}
+        <form method="post" action="{% url 'follow_user' profile_user.pk %}">
+            {% csrf_token %}
+            <button type="submit">Подписаться</button>
+        </form>
+    {% endif %}
+{% endif %}

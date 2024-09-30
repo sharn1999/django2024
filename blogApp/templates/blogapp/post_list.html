@@ -1,0 +1,38 @@
+<a href="{% url 'main' %}">На главную</a>
+
+<h1>Поиск постов</h1>
+
+<form method="GET" action="{% url 'post_list' %}">
+    <input type="text" name="q" placeholder="Введите поисковый запрос" value="">
+    <button type="submit">Поиск</button>
+</form>
+
+<h2>Результаты поиска</h2>
+<ul>
+    {% for post in page_obj %}
+        <li>
+            <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+            <p>{{ post.content|truncatewords:20 }}</p> 
+        </li>
+    {% empty %}
+        <li>Посты не найдены.</li>
+    {% endfor %}
+</ul>
+
+<div class="pagination"></div>
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if query %}&q={{ query }}{% endif %}">&laquo; Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}">&raquo; Последняя</a>
+        {% endif %}
+    </span>
+</div>

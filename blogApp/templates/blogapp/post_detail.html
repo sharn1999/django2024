@@ -1,0 +1,21 @@
+<a href="{% url 'post_list' %}">Назад</a>
+
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+<p>Автор: <a href="{% url 'profile' post.author.pk %}">{{ post.author.username }}</a> — {{ post.created_at }}</p>
+
+<h2>Комментарии</h2>
+<ul>
+    {% for comment in comments %}
+        <li><a href="{% url 'profile' comment.author.pk %}">{{ comment.author.username }}</a>: {{ comment.content }} ({{ comment.created_at }})</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'comment_create' post.pk %}">Добавить комментарий</a>
+{% if post.author == request.user %}
+    <a href="{% url 'post_edit' post.pk %}">Редактировать пост</a>
+    <form method="post" action="{% url 'post_delete' post.pk %}">
+        {% csrf_token %}
+        <button type="submit">Удалить пост</button>
+    </form>
+{% endif %}

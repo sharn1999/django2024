@@ -1,0 +1,11 @@
+{% if user.is_authenticated %}
+    <p>Привет, {{ user.username }}!</p>
+    <a href="{% url 'profile' user.pk %}">Мой профиль</a>
+
+    <a href="{% url 'post_list' %}">Все посты</a>
+
+    <a href="{% url 'logout' %}">Выйти</a>
+{% else %}
+    <a href="{% url 'login' %}">Войти</a>
+    <a href="{% url 'register' %}">Регистрация</a>
+{% endif %}
